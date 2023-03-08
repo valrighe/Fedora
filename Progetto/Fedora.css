@@ -1,0 +1,334 @@
+html { scroll-behavior: smooth; }
+body {
+	background-color: white;
+	background-origin: border-box;
+	background-size: cover;
+	background-repeat: no-repeat;
+	margin: auto;
+	max-width: 100%;
+}
+#sezioneIntro { 
+	padding-top: 80px; 
+	padding-bottom: 30px; 
+}
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: white;
+	position: fixed;
+	width: 100%;
+}
+li a { 
+	float: left;
+	display: block; 
+	padding: 8px;  
+	text-align: center;
+	text-decoration: none;
+	max-width: 100%;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+*.destra { 
+	float: right; 
+	padding-right: 20%; 
+}
+li a:link, #tornaHome:link { color: #696969; }
+li a:visited, #tornaHome:visited { color: #696969; }
+li a:active, #tornaHome:active { color: #D3D3D3; }
+li a:hover, #tornaHome:hover { color: #F08080; }
+#inizio { 
+	height: 700px; 
+	background-image: url("sfondoHeader3.jpg"); 
+	background-size: cover; 
+	background-repeat: no-repeat; 
+	margin: auto; 
+	max-width: 100%; 
+}
+h1 { 
+	text-align: center; 
+	font-family: serif; 
+	font-size: 80px; 
+	letter-spacing: 30px; 
+	margin-left: 2%; 
+	margin-bottom: 0px; 
+	margin-top: 20px;
+}
+h2 { 
+	text-align: center; 
+	letter-spacing: 7px;
+	margin-top: 0px; 
+}
+#intro { 
+	margin-bottom: 50px; 
+	display: block; 
+	font-size: 15px; 
+	padding-top: 10px; 
+}
+p { 
+	text-align: center; 
+	color: black; 
+	letter-spacing: 1.5px; 
+	line-height: 20px; 
+}
+*.formatta { 
+	line-height: 22px; 
+	text-indent: 50px; 
+	letter-spacing: 1.5px; 
+	text-align: justify; 
+	padding: 15px;
+}
+*.vuoto {
+	height: 50px; 
+	max-width: 100%;
+}
+#testoCitta { 
+	background-color: #F5F5F5; 
+	text-align: center;
+	max-width: 100%; 
+	margin: auto; 
+	height: auto; 
+	padding: 3% 5% 6% 5%; 
+}
+#formDragDrop { 
+	background-color: #DCDCDC;
+	max-width: 100%; 
+	height: auto; 
+	margin: auto; 
+	padding: 3% 5% 6% 5%; 
+}
+#introDrag { padding-bottom: 20px; }
+#sezioneElementi { 
+	width: 480px; 
+	height: 80px; 
+	margin: auto; 
+	padding-top: 60px; 
+}
+*.selezione { 
+	letter-spacing: 1.1px; 
+	width: 150px; 
+	height: 20px; 
+	text-align: center; 
+	background-color: white; 
+	font-size: 13px; 
+}
+#rettangolo { 
+	max-width: 155px; 
+	height: 75px; 
+	margin: auto; 
+	background-color: white; 
+}
+#sezionePulsantiForm { 
+	width: 85px; 
+	height: 85px; 
+	margin: auto; 
+	padding-top: 40px;
+}
+footer { 
+	background-color: #C0C0C0; 
+	text-align: center; 
+	color: black; 
+	padding: 3% 5% 2% 5%; 
+	letter-spacing: 1.5px;  
+	line-height: 20px; 
+	text-indent: 30px; 
+	font-size: 15px; 
+}
+#tornaHome { 
+	text-decoration: none; 
+	text-align: center; 
+	display: block; 
+	margin: auto; 
+	padding: 25px 0px 40px 0px;
+}
+#formRisultato { max-width: 100%; }
+*.risultati { 
+	box-shadow: 10px 10px 5px grey; 
+	margin-top: 50px; 
+	margin-bottom: 30px; 
+	display: none; 
+	border-radius: 50%; 
+	width: 600px; 
+	height: 600px; 
+	margin-left: auto; 
+	margin-right: auto;
+}
+*.testiRisultati { 
+	width:600px; 
+	margin-left: auto;
+	margin-right: auto;
+	height: auto; 
+	text-align: justify;
+	text-align-last: center;
+	padding-top: 20px;
+	letter-spacing: 1.5px; 
+	line-height: 20px;
+	font-size: 17px;
+	display: none; 
+}
+#laputa { content: url("Laputa.jpg"); }
+#hobbiton { content: url("Hobbiton.jpg"); }
+#coober { content: url("Coober.jpg"); }
+#artistica { content: url("Artistica1.jpg"); }
+#medusa { content: url("Medusa.jpg"); }
+*.buttonStyle {
+	background-color: #F5FFFA;
+	color: #708090;
+	font-size: 15px;
+	padding: 5px 15px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	border-radius: 4px;
+	border: 1px solid #708090;
+	margin: 5px;
+}
+*.buttonStyle:hover { 
+	background-color: #F08080; 
+	color: #2F4F4F; 
+	border: 1px solid #2F4F4F; 
+}
+#inizia {
+	background-color: #F5F5F5; 
+	padding-top: 10px; 
+}
+#fatto, #azzera { background-color: #DCDCDC; }
+#inizia:hover, #fatto:hover, #azzera:hover { background-color: white; }
+#messaggioErrore { 
+	font-size: 15px; 
+	letter-spacing: 1px; 
+	width: 500px; 
+	padding-top: 5px; 
+	margin-left: auto; 
+	margin-right: auto; 
+	display: block; 
+	text-align: center; 
+}
+#messaggioRandom { 
+	font-size: 18px; 
+	width: 600px; 
+	margin-left: auto; 
+	margin-right: auto; 
+	display: block; 
+	text-align: center; 
+}
+/*small devices*/
+@media only screen and (max-width: 600px) {
+	body { padding: 0px; }
+	*.destra { 
+		float: right; 
+		padding-right: 9px; 
+	}
+	#inizio { 
+		height: 300px; 
+		background-size: contain; 
+	}
+	h1 { 
+		font-size: 45px; 
+		letter-spacing: 25px; 
+		margin-left: 6%; 
+	}
+	h2 { 
+		letter-spacing: 6px; 
+		margin-top: 0px; 
+		font-size: 12px; 
+	}
+	#intro { 
+		font-size: 12px; 
+		padding-top: 8px; 
+	}
+	p { 
+		letter-spacing: 1px; 
+		line-height: 15px; 
+		font-size: 15px;
+	}
+	*.formatta { 
+		line-height: 17px; 
+		letter-spacing: 1px; 
+	}
+	#sezioneElementi { 
+		width: 160px; 
+		height: 235px; 
+	}
+	#formDragDrop { 
+		padding-top: 30px; 
+		padding-bottom: 60px; 
+	}
+	*.formattaFooter { 
+		font-size: 13px; 
+		line-height: 15px; 
+		text-indent: 30px; 
+		text-align: justify; 
+	}
+	#inizio { 
+		height: 500px; 
+		background-image: url("sfondoHeaderPICCOLOSCHERMO.jpg"); 
+		background-size: cover; 
+		background-repeat: no-repeat; 
+	}
+	*.risultati { 
+		width: 300px; 
+		height: 300px; 
+	}
+	*.testiRisultati { 
+		font-size: 13px; 
+		width: 250px;
+	}
+	#messaggioErrore { 
+		font-size: 12px; 
+		width: 140px; 
+		padding-top: 0px; 
+	}
+	#messaggioRandom { 
+		width: 300px; 
+		text-align: justify; 
+	}
+}
+/*medium devices*/
+@media only screen and (min-width: 601px) {
+	body { padding: 0px; }
+	*.destra { 
+		float: right; 
+		padding-right: 12px; 
+	}
+	h1 { 
+		letter-spacing: 25px; 
+		margin-left: 4%; 
+	}
+	#formDragDrop { 
+		padding-top: 50px; 
+		padding-bottom: 60px; 
+	}
+	*.selezione { font-size: 12px; }
+	#sezioneElementi { 
+		width: 480px; 
+		height: 80px; 
+		margin: auto; 
+		padding-top: 60px; 
+	}
+	#sezionePulsantiForm { padding-top: 40px; }
+	#messaggioErrore { 
+		font-size: 13px; 
+		letter-spacing: 1px; 
+		width: 480px; 
+	}
+	#messaggioRandom { 
+		padding-top: 30px; 
+		text-align: justify; 
+	}
+	*.risultati { 
+		width: 350px; 
+		height: 350px; 
+	}
+	*.testiRisultati { width: 350px; }
+}
+/*large devices*/
+@media only screen and (min-width: 720px) {
+	body { 
+		padding-left: 80px; 
+		padding-right: 80px; 
+	}
+	*.destra { padding-right: 156px; }
+	*.risultati { height: 500px; width: 500px; }
+	*.testiRisultati { width: 500px; }
+}

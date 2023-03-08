@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script>
+		//invocata quando non si ottiene una corrispondenza perfetta matriceScelte - modellini
+		function modellinoRandom (min, max) {
+			try {
+				var indiceRandom = Math.floor(Math.random() * (max - min + 1)) + min;
+				if (indiceRandom == 1) {
+					var risultatoRandom = document.getElementById("coober").style.display = "block";
+					var testoRandom = document.getElementById("testoCoober").style.display = "block";
+				} else if (indiceRandom == 2) {
+					var risultatoRandom = document.getElementById("laputa").style.display = "block";
+					var testoRandom = document.getElementById("testoLaputa").style.display = "block";
+				} else if (indiceRandom == 3) {
+					var risultatoRandom = document.getElementById("hobbiton").style.display = "block";
+					var testoRandom = document.getElementById("testoHobbiton").style.display = "block";
+				} else if (indiceRandom == 4) {
+					var risultatoRandom = document.getElementById("artistica").style.display = "block";
+					var testoRandom = document.getElementById("testoArtistica").style.display = "block";
+				} else if (indiceRandom == 5) {
+					var risultatoRandom = document.getElementById("medusa").style.display = "block";
+					var testoRandom = document.getElementById("testoMedusa").style.display = "block";
+				} else {
+					scriviMessaggio(nodoMessaggioRandom, "Ops, qualcosa è andato storto. Premere AZZERA per ricominciare.");
+				}
+				return risultatoRandom.innerHTML + testoRandom.innerHTML;
+			} catch ( e ) {
+			alert ("modellinoRandom " + e);
+			}
+		}
+		//invocata quando l'utente commette un "errore" nel drag and drop: appare un messaggio su schermo, sotto gli elementi del drag
+		function scriviMessaggio (nodo, messaggio) {
+			nodo.firstChild.nodeValue = messaggio;
+		}
+		//invocata quando l'utente preme SCOPRI
+		function gestoreInizia () {
+				document.getElementById("formDragDrop").scrollIntoView();
+		}
+		//invocata quando l'utente preme il pulsante AZZERA
+		function gestoreAzzera () {
+			try {
+				window.location.reload();
+			} catch ( e ) {
+				alert("gestoreAzzera " + e);
+			}
+		}
+		//invocata quando l'utente seleziona l'immagine e inizia a spostarla
+		function gestoreDragStart (evento) {
+			try {
+				scriviMessaggio(nodoMessaggioErrore, "");
+				evento.dataTransfer.setData("text", this.id);
+			} catch ( e ) {
+				alert("gestoreDragStart " + e);
+			}
+		}
+		//invocata quando l'utente sposta l'immagine sul rettangolo
+		function gestoreDragOver (evento) {
+			try {
+				event.preventDefault();
+			} catch ( e ) {
+				alert("gestoreDragOver " + e);
+			}
+		}
+		//gestisce le scelte effettuate dall'utente. Alcune si contraddicono e non possono essere scelte insieme
+		function gestoreScelte (dati){
+			try {
+				if (dati == "città") {
+					for (var i = 0; i < matriceScelte.length; i++){
+						if (matriceScelte[i] == "villaggio") {
+							scriviMessaggio(nodoMessaggioErrore, "Se è un villaggio non può essere una città");
+							return false;
+						}
+					}
+				} else if (dati == "villaggio") {
+					for (var i = 0; i < matriceScelte.length; i++){
+						if (matriceScelte[i] == "città") {
+							scriviMessaggio(nodoMessaggioErrore, "Se è una città non può essere un villaggio");
+							return false;
+						}
+					}
+				} else if (dati == "robot" || dati == "tecnologia") {
+					for (var i = 0; i < matriceScelte.length; i++){
+						if (matriceScelte[i] == "artigianato" || matriceScelte[i] == "agricoltura") {
+							scriviMessaggio(nodoMessaggioErrore, "Se è basata su agricoltura/artigianato non può essere basata sulla tecnologia/robotica");
+							return false;
+						}
+					}
+				} else if (dati == "agricoltura" || dati == "artigianato") {
+					for (var i = 0; i < matriceScelte.length; i++){
+						if (matriceScelte[i] == "robot" || matriceScelte[i] == "tecnologia") {
+							scriviMessaggio(nodoMessaggioErrore, "Se è basata sulla robotica/tecnologia non può essere basata su agricoltura/artigianato");
+							return false;
+						}
+					}
+				} else if (dati == "visionaria") {
+					for (var i = 0; i < matriceScelte.length; i++){
+						if (matriceScelte[i] == "pratica") {
+							scriviMessaggio(nodoMessaggioErrore, "Se è pratica non può essere visionaria");
+							return false;
+						}
+					}
+				} else if (dati == "pratica") {
+					for (var i = 0; i < matriceScelte.length; i++){
+						if (matriceScelte[i] == "visionaria") {
+							scriviMessaggio(nodoMessaggioErrore, "Se è visionaria non può essere pratica");
+							return false;
+						}
+					}
+				}
+			} catch ( e ) {
+				alert("gestoreScelte " + e);
+			}
+		}
+
+		//invocata quando l'utente rilascia l'immagine all'interno del rettangolo
+		function gestoreDrop (evento) {
+			try {
+				if (matriceScelte.length < 3) {
+					evento.preventDefault();
+					var dati = evento.dataTransfer.getData("text");
+					gestoreScelte(dati);
+					this.appendChild(document.getElementById(dati));
+					//così aggiungo la scelta alla matrice:
+					matriceScelte[matriceScelte.length] = dati;
+					/*se son state scelte due opzioni contradditorie 
+					l'ultima viene rimossa dall'array:*/
+					if (gestoreScelte(dati) == false) {
+						matriceScelte.pop();
+						this.removeChild(document.getElementById(dati));
+					}
+				} else {
+					scriviMessaggio(nodoMessaggioErrore, "Per ottenere un profilo adeguato è necessario scegliere tre caratteristiche");
+				}
+			} catch ( e ) {
+				alert("gestoreDrop " + e);
+			}
+		}
+		//usata per cambiare il cursore quando passa sopra i testi da spostare o i pulsanti
+		function gestoreCursore () {
+			try {
+				nodoRobot.style.cursor = "pointer";
+				nodoVillaggio.style.cursor = "pointer";
+				nodoVisionaria.style.cursor = "pointer";
+				nodoArtigianato.style.cursor = "pointer";
+				nodoTecnologia.style.cursor = "pointer";
+				nodoCitta.style.cursor = "pointer";
+				nodoAgricoltura.style.cursor = "pointer";
+				nodoPratica.style.cursor = "pointer";
+				nodoArte.style.cursor = "pointer";
+				nodoFatto.style.cursor = "pointer";
+				nodoAzzera.style.cursor = "pointer";
+				nodoInizia.style.cursor = "pointer";
+			} catch ( e ) {
+				alert("gestoreCursore " + e);
+			}
+		}
+		//controlla se matriceScelte corrisponde ad un modellino precostruito
+		function controlloImmagineCitta (modello) {
+			try {
+					var c = 0;
+					for (var i = 0; i < matriceScelte.length; i++) {
+						for (var j = 0; j < matriceScelte.length; j++) {
+							if (matriceScelte[i] == modello[j]) {
+								c++;
+							}
+						}
+					}
+					if (c == 3) {
+						return true; 
+					} else {
+						return false;
+					}
+			} catch ( e ) {
+				alert ("controlloImmagineCitta " + e);
+			}
+		}
+		//restituisce il modellino (sia con corrispondenza esatta che non) 
+		function creaModellino () {
+			try {
+					if (matriceScelte.length == 3) {
+						document.getElementById("formRisultato").scrollIntoView();
+						document.getElementById("fatto").style.display = "none";
+						if (controlloImmagineCitta(MODELLO_COOBER)) {
+							var risultato = document.getElementById("coober").style.display = "block";
+							var testo = document.getElementById("testoCoober").style.display = "block";
+							return risultato.innerHTML + testo.innerHTML;
+						} else if (controlloImmagineCitta(MODELLO_LAPUTA)) {
+							var risultato = document.getElementById("laputa").style.display = "block";
+							var testo = document.getElementById("testoLaputa").style.display = "block";
+							return risultato.innerHTML + testo.innerHTML;
+						} else if (controlloImmagineCitta(MODELLO_HOBBITON)) {
+							var risultato = document.getElementById("hobbiton").style.display = "block";
+							var testo = document.getElementById("testoHobbiton").style.display = "block";
+							return risultato.innerHTML + testo.innerHTML;
+						} else if (controlloImmagineCitta(MODELLO_ARTISTICA)) {
+							var risultato = document.getElementById("artistica").style.display = "block";
+							var testo = document.getElementById("testoArtistica").style.display = "block";
+							return risultato.innerHTML + testo.innerHTML;
+						} else if (controlloImmagineCitta(MODELLO_MEDUSA)) {
+							var risultato = document.getElementById("medusa").style.display = "block";
+							var testo = document.getElementById("testoMedusa").style.display = "block";
+							return risultato.innerHTML + testo.innerHTML;
+						} else {
+							scriviMessaggio(nodoMessaggioRandom, "Non ci sono corrispondenze esatte. Il risultato sarà casuale:");
+							document.getElementById("fatto").style.display = "none";
+							modellinoRandom(1, 5);
+						}
+				} else if (matriceScelte.length < 3) {
+					scriviMessaggio(nodoMessaggioErrore, "Per ottenere un profilo adeguato è necessario scegliere tre caratteristiche");
+				}
+			} catch ( e ) {
+				alert ("creaModellino " + e);
+			}
+		}
+
+		var nodoFatto;
+		var nodoAzzera;
+		var nodoInizia;
+
+		var nodoRettangolo;
+		var nodoRobot;
+		var nodoVillaggio;
+		var nodoVisionaria;
+		var nodoArtigianato;
+		var nodoTecnologia;
+		var nodoCitta;
+		var nodoAgricoltura;
+		var nodoPratica;
+		var nodoArte;
+
+		var nodoMessaggioErrore;
+		var nodoMessaggioRandom;
+		var nodoAnnoRisultato;
+		var nodoTestoRisultato;
+
+		var matriceScelte;
+
+		function gestoreLoad () {
+			try {
+				nodoFatto = document.getElementById("fatto");
+				nodoAzzera = document.getElementById("azzera");
+				nodoInizia = document.getElementById("inizia");
+				nodoRettangolo = document.getElementById("rettangolo");
+				nodoRobot = document.getElementById("robot");
+				nodoVillaggio = document.getElementById("villaggio");
+				nodoVisionaria = document.getElementById("visionaria");
+				nodoArtigianato = document.getElementById("artigianato");
+				nodoTecnologia = document.getElementById("tecnologia");
+				nodoCitta = document.getElementById("città");
+				nodoAgricoltura = document.getElementById("agricoltura");
+				nodoPratica = document.getElementById("pratica");
+				nodoArte = document.getElementById("arte");
+				
+				nodoFatto.addEventListener("click", creaModellino);
+				nodoAzzera.onclick = gestoreAzzera;
+				nodoInizia.addEventListener("click", gestoreInizia);
+				
+				nodoRettangolo.ondragover = gestoreDragOver;
+				nodoRettangolo.ondrop = gestoreDrop;
+				
+				nodoRobot.ondragstart = gestoreDragStart;
+				nodoRobot.onmouseover = gestoreCursore;
+				nodoVillaggio.ondragstart = gestoreDragStart;
+				nodoVillaggio.onmouseover = gestoreCursore;
+				nodoVisionaria.ondragstart = gestoreDragStart;
+				nodoVisionaria.onmouseover = gestoreCursore;
+				nodoArtigianato.ondragstart = gestoreDragStart;
+				nodoArtigianato.onmouseover = gestoreCursore;
+				nodoTecnologia.ondragstart = gestoreDragStart;
+				nodoTecnologia.onmouseover = gestoreCursore;
+				nodoCitta.ondragstart = gestoreDragStart;
+				nodoCitta.onmouseover = gestoreCursore;
+				nodoAgricoltura.ondragstart = gestoreDragStart;	
+				nodoAgricoltura.onmouseover = gestoreCursore;
+				nodoPratica.ondragstart = gestoreDragStart;
+				nodoPratica.onmouseover = gestoreCursore;
+				nodoArte.ondragstart = gestoreDragStart;
+				nodoArte.onmouseover = gestoreCursore;
+				
+				matriceScelte = [];
+				
+				nodoMessaggioErrore = document.getElementById("messaggioErrore");
+				var nodoTesto = document.createTextNode("");
+				nodoMessaggioErrore.appendChild(nodoTesto);
+				nodoMessaggioRandom = document.getElementById("messaggioRandom");
+				var nodoTesto2 = document.createTextNode("");
+				nodoMessaggioRandom.appendChild(nodoTesto2);
+			} catch ( e ) {
+				alert("gestoreLoad " + e);
+			}
+		}
+		window.onload = gestoreLoad;
+
+		const MODELLO_LAPUTA = ['robot', 'visionaria', 'città'];
+		const MODELLO_HOBBITON = ["villaggio", "agricoltura", "artigianato"];
+		const MODELLO_COOBER = ["città", "pratica", "artigianato"];
+		const MODELLO_ARTISTICA = ["arte", "città", "visionaria"];
+		const MODELLO_MEDUSA = ["città", "pratica", "tecnologia"];
+		</script>
+		<style type="text/css" media="screen">
+		html { scroll-behavior: smooth; }
+		body {
+			background-color: white;
+			background-origin: border-box;
+			background-size: cover;
+			background-repeat: no-repeat;
+			margin: auto;
+			max-width: 100%;
+		}
+		#sezioneIntro { 
+			padding-top: 80px; 
+			padding-bottom: 30px; 
+		}
+		ul {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+			background-color: white;
+			position: fixed;
+			width: 100%;
+		}
+		li a { 
+			float: left;
+			display: block; 
+			padding: 8px;  
+			text-align: center;
+			text-decoration: none;
+			max-width: 100%;
+			margin-top: 10px;
+			margin-bottom: 10px;
+		}
+		*.destra { 
+			float: right; 
+			padding-right: 20%; 
+		}
+		li a:link, #tornaHome:link { color: #696969; }
+		li a:visited, #tornaHome:visited { color: #696969; }
+		li a:active, #tornaHome:active { color: #D3D3D3; }
+		li a:hover, #tornaHome:hover { color: #F08080; }
+		#inizio { 
+			height: 700px; 
+			background-image: url("sfondoHeader3.jpg"); 
+			background-size: cover; 
+			background-repeat: no-repeat; 
+			margin: auto; 
+			max-width: 100%; 
+		}
+		h1 { 
+			text-align: center; 
+			font-family: serif; 
+			font-size: 80px; 
+			letter-spacing: 30px; 
+			margin-left: 2%; 
+			margin-bottom: 0px; 
+			margin-top: 20px;
+		}
+		h2 { 
+			text-align: center; 
+			letter-spacing: 7px;
+			margin-top: 0px; 
+		}
+		#intro { 
+			margin-bottom: 50px; 
+			display: block; 
+			font-size: 15px; 
+			padding-top: 10px; 
+		}
+		p { 
+			text-align: center; 
+			color: black; 
+			letter-spacing: 1.5px; 
+			line-height: 20px; 
+		}
+		*.formatta { 
+			line-height: 22px; 
+			text-indent: 50px; 
+			letter-spacing: 1.5px; 
+			text-align: justify; 
+			padding: 15px;
+		}
+		*.vuoto {
+			height: 50px; 
+			max-width: 100%;
+		}
+		#testoCitta { 
+			background-color: #F5F5F5; 
+			text-align: center;
+			max-width: 100%; 
+			margin: auto; 
+			height: auto; 
+			padding: 3% 5% 6% 5%; 
+		}
+		#formDragDrop { 
+			background-color: #DCDCDC;
+			max-width: 100%; 
+			height: auto; 
+			margin: auto; 
+			padding: 3% 5% 6% 5%; 
+		}
+		#introDrag { padding-bottom: 20px; }
+		#sezioneElementi { 
+			width: 480px; 
+			height: 80px; 
+			margin: auto; 
+			padding-top: 60px; 
+		}
+		*.selezione { 
+			letter-spacing: 1.1px; 
+			width: 150px; 
+			height: 20px; 
+			text-align: center; 
+			background-color: white; 
+			font-size: 13px; 
+		}
+		#rettangolo { 
+			max-width: 155px; 
+			height: 75px; 
+			margin: auto; 
+			background-color: white; 
+		}
+		#sezionePulsantiForm { 
+			width: 85px; 
+			height: 85px; 
+			margin: auto; 
+			padding-top: 40px;
+		}
+		footer { 
+			background-color: #C0C0C0; 
+			text-align: center; 
+			color: black; 
+			padding: 3% 5% 2% 5%; 
+			letter-spacing: 1.5px;  
+			line-height: 20px; 
+			text-indent: 30px; 
+			font-size: 15px; 
+		}
+		#tornaHome { 
+			text-decoration: none; 
+			text-align: center; 
+			display: block; 
+			margin: auto; 
+			padding: 25px 0px 40px 0px;
+		}
+		#formRisultato { max-width: 100%; }
+		*.risultati { 
+			box-shadow: 10px 10px 5px grey; 
+			margin-top: 50px; 
+			margin-bottom: 30px; 
+			display: none; 
+			border-radius: 50%; 
+			width: 600px; 
+			height: 600px; 
+			margin-left: auto; 
+			margin-right: auto;
+		}
+		*.testiRisultati { 
+			width:600px; 
+			margin-left: auto;
+			margin-right: auto;
+			height: auto; 
+			text-align: justify;
+			text-align-last: center;
+			padding-top: 20px;
+			letter-spacing: 1.5px; 
+			line-height: 20px;
+			font-size: 17px;
+			display: none; 
+		}
+		#laputa { content: url("Laputa.jpg"); }
+		#hobbiton { content: url("Hobbiton.jpg"); }
+		#coober { content: url("Coober.jpg"); }
+		#artistica { content: url("Artistica1.jpg"); }
+		#medusa { content: url("Medusa.jpg"); }
+		*.buttonStyle {
+			background-color: #F5FFFA;
+			color: #708090;
+			font-size: 15px;
+			padding: 5px 15px;
+			padding-top: 10px;
+			padding-bottom: 10px;
+			border-radius: 4px;
+			border: 1px solid #708090;
+			margin: 5px;
+		}
+		*.buttonStyle:hover { 
+			background-color: #F08080; 
+			color: #2F4F4F; 
+			border: 1px solid #2F4F4F; 
+		}
+		#inizia {
+			background-color: #F5F5F5; 
+			padding-top: 10px; 
+		}
+		#fatto, #azzera { background-color: #DCDCDC; }
+		#inizia:hover, #fatto:hover, #azzera:hover { background-color: white; }
+		#messaggioErrore { 
+			font-size: 15px; 
+			letter-spacing: 1px; 
+			width: 500px; 
+			padding-top: 5px; 
+			margin-left: auto; 
+			margin-right: auto; 
+			display: block; 
+			text-align: center; 
+		}
+		#messaggioRandom { 
+			font-size: 18px; 
+			width: 600px; 
+			margin-left: auto; 
+			margin-right: auto; 
+			display: block; 
+			text-align: center; 
+		}
+		</style>
+		<title>Museo di Fedora</title>
+	</head>
+	<body>
+		<div id="inizio">
+			<header>
+				<nav>
+					<ul>
+						<li><a href="#inizio" title="Home">HOME</a></li>
+						<li><a href="#aboutAuthor" class="destra" id="aboutA">ABOUT</a></li>
+					</ul>
+				</nav>
+			</header>
+		<br />
+		<section id="sezioneIntro">	
+			<h1>FEDORA</h1>
+			<h2>Città dei desideri incompiuti</h2>
+			<p id="intro">Situato al centro della città, il Museo di Metallo<br />
+						  ospita i modellini della Fedora che fu e che mai sarà.</p>
+		</section>
+		</div>
+		<br />
+		<br />
+		<div class="vuoto"></div>
+		<div id="testoCitta">
+			<p class="formatta">"Al centro di Fedora, metropoli di pietra grigia, sta un palazzo di metallo con una sfera di vetro in ogni stanza. 
+								Guardando dentro ogni sfera si vede una città azzurra che è il modello d'un'altra Fedora. Sono le forme che la città 
+								avrebbe potuto prendere se non fosse, per una ragione o per 1'altra, diventata come oggi la vediamo. In ogni epoca 
+								qualcuno, guardando Fedora qual era, aveva immaginato il modo di farne la città ideale, ma mentre costruiva il suo modello 
+								in miniatura già Fedora non era più la stessa di prima, e quello che fino a ieri era stato un suo possibile futuro 
+								ormai era solo un giocattolo in una sfera di vetro. Fedora ha adesso nel palazzo delle sfere il suo museo: ogni abitante 
+								lo visita, sceglie la città che corrisponde ai suoi desideri, la contempla immaginando di specchiarsi nella peschiera 
+								delle meduse che doveva raccogliere le acque del canale (se non fosse stato prosciugato), di percorrere dall'alto del baldacchino 
+								il viale riservato agli elefanti (ora banditi dalla città), di scivolare lungo la spirale del minareto a chiocciola (che non trovò 
+								più la base su cui sorgere). Nella mappa del tuo impero, o grande Kan, devono trovar posto sia la grande Fedora di pietra sia le 
+								piccole Fedore nelle sfere di vetro. Non perché tutte ugualmente reali, ma perché tutte solo presunte. L'una racchiude ciò che è 
+								accettato come necessario mentre non lo è ancora; le altre ciò che è immaginato come possibile e un minuto dopo non lo è più."</p>
+			<p>Italo Calvino, <i>Le città invisibili</i></p>
+			<br />
+			<p>Scopri quale Fedora ti rappresenta di più:</p>
+			<input type="button"
+				   id="inizia"
+				   value="SCOPRI"
+				   class="buttonStyle"/>
+		</div>
+		<div class="vuoto"></div>
+		<div id="formDragDrop">
+			<p id="introDrag">Scegli tre caratteristiche e spostale nel rettangolo sottostante:</p>
+			<div id="rettangolo"
+				 ondrop="gestoreDrop(evento)"
+				 ondragover="gestoreDragOver(evento)"></div>
+			<section id="sezioneElementi">
+				<input type="text"
+					   class="selezione"
+					   id="robot"
+					   value="Robotica"
+					   readonly="readonly"
+					   draggable="true"
+					   ondragstart="gestoreDragStart(evento)"/>
+				<input type="text"
+					   class="selezione"
+					   id="villaggio"
+					   value="Villaggio"
+					   readonly="readonly"
+					   draggable="true"
+					   ondragstart="gestoreDragStart(evento)"/>
+				<input type="text"
+					   class="selezione"
+					   id="visionaria"
+					   value="Visionaria"
+					   readonly="readonly"
+					   draggable="true"
+					   ondragstart="gestoreDragStart(evento)"/>
+				<input type="text"
+					   class="selezione"
+					   id="artigianato"
+					   value="Artigianato"
+					   readonly="readonly"
+					   draggable="true"
+					   ondragstart="gestoreDragStart(evento)"/>
+				<input type="text"
+					   class="selezione"
+					   id="tecnologia"
+					   value="Tecnologica"
+					   readonly="readonly"
+					   draggable="true"
+					   ondragstart="gestoreDragStart(evento)"/>
+				<input type="text"
+					   class="selezione"
+					   id="città"
+					   value="Città"
+					   readonly="readonly"
+					   draggable="true"
+					   ondragstart="gestoreDragStart(evento)"/>
+				<input type="text"
+					   class="selezione"
+					   id="agricoltura"
+					   value="Agricoltura"
+					   readonly="readonly"
+					   draggable="true"
+					   ondragstart="gestoreDragStart(evento)"/>
+				<input type="text"
+					   class="selezione"
+					   id="pratica"
+					   value="Pratica"
+					   readonly="readonly"
+					   draggable="true"
+					   ondragstart="gestoreDragStart(evento)"/>
+				<input type="text"
+					   class="selezione"
+					   id="arte"
+					   value="Arte"
+					   readonly="readonly"
+					   draggable="true"
+					   ondragstart="gestoreDragStart(evento)"/>
+			</section>
+			<span id="messaggioErrore"></span>
+			<section id="sezionePulsantiForm">
+				<input type="button"
+					   id="fatto"
+					   value="FATTO"
+					   class="buttonStyle"/>
+				<input type="button"
+				       id="azzera"
+					   value="AZZERA"
+ 					   class="buttonStyle"/>
+			</section>
+			</div>
+			<section id="formRisultato">
+				<span id="messaggioRandom"
+				      class="formatta"></span>
+				<span id="laputa"
+				      class="risultati"></span>
+				<span id="hobbiton"
+				      class="risultati"></span>
+				<span id="coober"
+				      class="risultati"></span>
+				<span id="artistica"
+				      class="risultati"></span>
+				<span id="medusa"
+				      class="risultati"></span>
+				<span id="testoRisultato">
+					  <span id="testoRisFormatt"></span></span>
+				<span id="testoLaputa"
+					  class="testiRisultati">Autore sconosciuto<br />Anno: 1726
+											<br /><br />L'autore, grande sostenitore del progresso tecnologico,
+											progettò questa Fedora sul modello del suo paese d'origine. 
+											Lo spettatore, tuttavia, non deve ingannarsi: nonostante sembri un 
+											classico paesino di montagna, questa Fedora nasconde un segreto... 
+											si basa completamente sull'utilizzo della robotica in ogni ambito 
+											della vita quotidiana.</span>
+				<span id="testoHobbiton"
+					  class="testiRisultati">Autore sconosciuto<br />Anno: 1937
+											<br /><br />L'autore che creò questa versione di Fedora era un fervido
+											sostenitore del ritorno alle origini; pensò, dunque, ad un villaggio 
+											basato completamente su agricoltura e artigianato, nel quale gli unici 
+											elementi tecnologici fossero le automobili per spostarsi comodamente 
+											e i pannelli solari a sostegno di una vita più ecosostenibile.</span>
+				<span id="testoCoober"
+					  class="testiRisultati">Autore sconosciuto<br />Anno: 1915
+											<br /><br />A causa dell'improvviso cambiamento climatico agli inizi del
+											Novecento, a Fedora si pensò di ideare una città sotterranea che permettesse
+											ai cittadini di sopravvivere all'innalzamento delle temperature. Questo modellino
+											ne è una rappresentazione. La nuova Fedora si sarebbe dovuta basata sull'artigianato
+											e su una vita pratica e spartana.</span>
+				<span id="testoArtistica"
+					  class="testiRisultati">Autore sconosciuto<br />Anno: 2002
+											<br /><br />L'ideatore di questo modellino era un fervido sostenitore dell'arte e, 
+											in onore alla sua passione, pensò a Fedora come ad un museo aperto che includesse
+											le opere d'arte più famose e spettacolari.</span>
+				<span id="testoMedusa"
+					  class="testiRisultati">Autore sconosciuto<br />Anno: 3076
+											<br /><br />L'autore, un famoso progettista di cui si è perso il nome, progettò
+											questa Fedora per poter raccogliere le acque di scolo in un lago 
+											artificiale, abitato da meduse, posto alle porte della città.</span>
+			</section>
+			<div class="vuoto"></div>
+			<footer><a id="aboutAuthor"></a>
+				<p class="formattaFooter">ABOUT THE PROJECT. Progetto realizzato da Righetti Valentina per il corso di Fondamenti di 
+										  Informatica (a.a. 2019/2020) dell'Università di Pisa.</p>
+				<p class="formattaFooter">ABOUT FEDORA. Le immagini sono state recuperate da Unsplash.com o Google Immagini
+										  ed eventualmente modificate con Gimp.
+										  <br />Il testo di riferimento è <i>Le città invisibili</i> di Italo Calvino, edizione Einaudi (1972).
+										  <br />Il codice CSS è stato validato con il validatore di W3Schools.</p>
+			</footer>
+		<a href="#inizio" id="tornaHome">TORNA ALLA HOME</a>
+	</body>
+</html>
