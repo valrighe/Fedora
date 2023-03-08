@@ -1,5 +1,5 @@
 # Fedora
-Progetto d'esame di Fondamenti di Informatica - UNIPI 2019
+Progetto d'esame di Fondamenti di Informatica - UNIPI, magistrale di Informatica Umanistica (Digital Humanities), 2019
 
 ## Il progetto
 *Fedora* nasce dalla lettura di *Le città invisibili* di Italo Calvino. Scopo del progetto è stato quello di ricreare una pagina HTML che richiamasse una delle città presentate da Calvino nel libro.
