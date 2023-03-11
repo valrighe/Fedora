@@ -12,7 +12,7 @@ La pagina HTML è responsive e interattiva.
 
 ## Contenuto della repository
 - File *README.md* con le specifiche del progetto;
-- Cartella *Progetto* con i file CSS, HTML e JavaScript e le immagini.
+- Cartella *Project* con i file CSS, HTML e JavaScript e le immagini.
 
 ## Autore
 Il progetto è stato realizzato interamente da me. 
